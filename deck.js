@@ -1,4 +1,4 @@
-deck = [
+const fullDeck = [
     {"suit": "spades", "number": "A", "status": "deck"},
     {"suit": "spades", "number": "2", "status": "deck"},
     {"suit": "spades", "number": "3", "status": "deck"},
