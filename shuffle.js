@@ -6,4 +6,5 @@ function shuffle(fullDeck){
     }
     console.log(deck)
     return deck
+    //shuffled deck
 }
