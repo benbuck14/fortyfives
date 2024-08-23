@@ -67,4 +67,57 @@ function shuffle(fullDeck){
     //shuffled deck
 }
 
-shuffle(fullDeck);
+let deck = shuffle(fullDeck);
+
+round = {
+    "round": 1,
+    "deck": deck,
+    "player1": {
+        "team": "red",
+        "cardinal": "south",
+        "position": "dealer"
+    },
+    "player2": {
+        "team": "blue",
+        "cardinal": "west",
+        "position": "left"
+    },
+    "player3": {
+        "team": "red",
+        "cardinal": "north",
+        "position": "across"
+    },
+    "player4": {
+        "team": "red",
+        "cardinal": "south",
+        "position": "right"
+    }
+}
+
+function initialDeal(round){
+    round.player1.hand = round.deck.splice(0,3)
+    round.player2.hand = round.deck.splice(0,3)
+    round.player3.hand = round.deck.splice(0,3)
+    round.player4.hand = round.deck.splice(0,3)
+    round.kitty = round.deck.splice(0,2)
+
+    console.log(round)
+
+    return round
+}
+
+initialDeal(round);
+
+function secondDeal(round){
+    round.player1.hand.push(...round.deck.splice(0,2))
+    round.player2.hand.push(...round.deck.splice(0,2))
+    round.player3.hand.push(...round.deck.splice(0,2))
+    round.player4.hand.push(...round.deck.splice(0,2))
+    round.kitty.push(...round.deck.splice(0,2))
+
+    console.log(JSON.stringify(round,null,2))
+
+    return round
+}
+
+secondDeal(round)
