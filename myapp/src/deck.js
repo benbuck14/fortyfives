@@ -1,4 +1,4 @@
-const fullDeck = [
+export const fullDeck = [
     {"suit": "spades", "number": "A", "status": "deck"},
     {"suit": "spades", "number": "2", "status": "deck"},
     {"suit": "spades", "number": "3", "status": "deck"},
@@ -56,7 +56,7 @@ const fullDeck = [
     {"suit": "clubs", "number": "K", "status": "deck"}
 ]
 
-function shuffle(fullDeck){
+export function shuffle(fullDeck){
     let deck = fullDeck.slice();
     for(let i = deck.length - 1; i>0; i--){
         const j = Math.floor(Math.random()*(i+1));
@@ -67,4 +67,4 @@ function shuffle(fullDeck){
     //shuffled deck
 }
 
-shuffle(fullDeck);
+shuffle(fullDeck)
