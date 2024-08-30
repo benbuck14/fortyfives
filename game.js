@@ -62,7 +62,7 @@ function shuffle(fullDeck){
         const j = Math.floor(Math.random()*(i+1));
         [deck[i],deck[j]] =[deck[j],deck[i]];
     }
-    console.log(deck)
+    //console.log(deck)
     return deck
     //shuffled deck
 }
@@ -101,7 +101,7 @@ function initialDeal(round){
     round.player4.hand = round.deck.splice(0,3)
     round.kitty = round.deck.splice(0,2)
 
-    console.log(round)
+    //console.log(round)
 
     return round
 }
@@ -115,9 +115,16 @@ function secondDeal(round){
     round.player4.hand.push(...round.deck.splice(0,2))
     round.kitty.push(...round.deck.splice(0,2))
 
-    console.log(JSON.stringify(round,null,2))
+    //console.log(JSON.stringify(round,null,2))
 
     return round
 }
 
 secondDeal(round)
+
+function bidding(round){
+    let playerArray = [round.player1, round.player2, round.player3, round.player4]
+    console.log(playerArray[Math.floor(Math.random()*4)])
+}
+
+bidding(round)
