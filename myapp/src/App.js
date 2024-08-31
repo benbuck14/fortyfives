@@ -1,8 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
 import {shuffle, fullDeck} from './deck.js';
+import { bidding } from './bidding.js';
+import { initialDeal } from './initialDeal.js';
+import { secondDeal } from './secondDeal.js';
+import { gameObject } from './gameObject.js';
 
-let deck = shuffle(fullDeck)
+
+gameObject.deck = shuffle(fullDeck)
 
 
 
