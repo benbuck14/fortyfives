@@ -1,15 +1,17 @@
-export function initialDeal(game){
-    game.player1.hand = game.deck.splice(0,3)
-    game.player2.hand = game.deck.splice(0,3)
-    game.player3.hand = game.deck.splice(0,3)
-    game.player4.hand = game.deck.splice(0,3)
-    game.kitty = game.deck.splice(0,2)
-    game.player1.hand.push(...game.deck.splice(0,2))
-    game.player2.hand.push(...game.deck.splice(0,2))
-    game.player3.hand.push(...game.deck.splice(0,2))
-    game.player4.hand.push(...game.deck.splice(0,2))
-    game.kitty.push(...game.deck.splice(0,2))
-    //console.log(game)
+export function initialDeal(deck){
+    console.log("testing deal function" + deck[0])
+    let hand1 = deck.splice(0,3)
+    let hand2 = deck.splice(0,3)
+    let hand3 = deck.splice(0,3)
+    let hand4 = deck.splice(0,3)
+    let dealtKitty = deck.splice(0,2)
+    hand1.push(...deck.splice(0,2))
+    hand2.push(...deck.splice(0,2))
+    hand3.push(...deck.splice(0,2))
+    hand4.push(...deck.splice(0,2))
+    dealtKitty.push(...deck.splice(0,2))
 
-    return game
+    let hands = [hand1, hand2, hand3, hand4, dealtKitty]
+
+    return hands
 }
