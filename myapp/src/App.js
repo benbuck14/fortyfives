@@ -12,7 +12,7 @@ import { initialDeal } from './initialDeal.js';
 
 function App() {
   let currentID = "a123";
-  // currentID = "b456"
+  currentID = "b456"
   // currentID = "c789"
   // currentID = "d000"
   console.log("fullDeck:" + fullDeck)
@@ -114,7 +114,7 @@ function App() {
     <div className="App">
      <header className="App-header">
 
-        <img src={logo} className="App-logo" alt="logo" />
+        {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <h1>Forty Fives</h1>
         <button onClick={handleShuffle}>Deal</button>
     <br></br>
@@ -131,12 +131,17 @@ function App() {
         {east.hand.length > 0 && (
         <div>{currentPlayer?.id === east.id && east.hand.map(card => card.sn).join(', ')}</div>
         )}
-        {currentPlayer?.position === "dealer" && (
+        {currentBidder?.position === currentPlayer?.position && (
         <>
+          <br></br>
           <button onClick={() => handleBid("Bid 20", currentPlayer)}>Bid 20</button>
+          <br></br>
           <button onClick={() => handleBid("Bid 25", currentPlayer)}>Bid 25</button>
+          <br></br>
           <button onClick={() => handleBid("Bid 30", currentPlayer)}>Bid 30</button>
+          <br></br>
           <button onClick={() => handleBid("Pass", currentPlayer)}>Pass</button>
+          <br></br>
       </>
         )}
 
