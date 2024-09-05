@@ -12,7 +12,7 @@ import { initialDeal } from './initialDeal.js';
 
 function App() {
   let currentID = "a123";
-  currentID = "b456"
+  // currentID = "b456"
   // currentID = "c789"
   // currentID = "d000"
   console.log("fullDeck:" + fullDeck)
@@ -39,7 +39,7 @@ function App() {
     } else if (east.id === currentID) {
       setCurrentPlayer(east);
     }
-  }, [currentID, south, west, north, east]);
+  }, [currentID]);
 
   const handleShuffle = () => {
     console.log("test")
@@ -62,40 +62,38 @@ function App() {
   };
 
   const handleBid = (buttonText, player) => {
-    if(player.position === "left"){
-  
-      setCurrentBidder("the player with .position === across")
+    const bidArray = bidding(buttonText, player)
+    console.log(bidArray)
+    let bid = bidArray[1]
+    console.log("bid" + bid)
+    console.log("currentBid" + currentBid)
+    let nextPosition = bidArray[0]
+    if(bid > currentBid){
+      console.log("bid > currentBid")
+      setCurrentBid(bid)
+      setHighestBidder(player)
     }
-    else if(player.position === "across"){
-      setCurrentBidder("right")
+    if(south.position === nextPosition){
+      setCurrentBidder(south)
     }
-    else if(player.position === "right"){
-      setCurrentBidder("dealer")
+    else if(west.position === nextPosition){
+      setCurrentBidder(west)
+      console.log("set west")
     }
-    if(buttonText === "pass"){
-      return;
+    else if(north.position === nextPosition){
+      setCurrentBidder(north)
+      console.log("set north")
     }
-    else {
-    setHighestBidder(player)
-    if(buttonText === "Bid 20"){
-      setCurrentBid(20)
+    else if(east.position === nextPosition){
+      console.log("set east")
+      setCurrentBidder(east)
     }
-    else if(buttonText === "Bid 25"){
-      setCurrentBid(25)
-    }
-    else if(buttonText === "Bid 30"){
-      setCurrentBid(30)
-    }
-    if(currentBidder.position === "left"){
-      setCurrentBidder("across")
-    }
-    if(currentBidder.position === "across"){
-      setCurrentBidder("right")
-    }
-    if(currentBidder.position === "right"){
-      setCurrentBidder("dealer")
-    }
-  }
+    console.log("Bid:" + currentBid)
+    console.log("Next position:" + nextPosition)
+    console.log("North position:" + north?.position)
+    console.log("North id:" + north?.id)
+    console.log("Highest Bidder:" + highestBidder?.id)
+    console.log("Next Bidder:" + currentBidder?.id)
   }
   
     useEffect(()=>{
@@ -131,12 +129,25 @@ function App() {
         {east.hand.length > 0 && (
         <div>{currentPlayer?.id === east.id && east.hand.map(card => card.sn).join(', ')}</div>
         )}
-        {currentBidder?.position === currentPlayer?.position && (
+        {currentPlayer?.position !== "dealer" && currentBidder?.position === currentPlayer?.position && (
         <>
           <br></br>
           <button onClick={() => handleBid("Bid 20", currentPlayer)}>Bid 20</button>
           <br></br>
           <button onClick={() => handleBid("Bid 25", currentPlayer)}>Bid 25</button>
+          <br></br>
+          <button onClick={() => handleBid("Bid 30", currentPlayer)}>Bid 30</button>
+          <br></br>
+          <button onClick={() => handleBid("Pass", currentPlayer)}>Pass</button>
+          <br></br>
+      </>
+        )}
+        {currentPlayer?.position === "dealer" && currentBidder?.position === currentPlayer?.position && (
+        <>
+          <br></br>
+          <button onClick={() => handleBid("Hold", currentPlayer)}>Hold</button>
+          <br></br>
+          <button onClick={() => handleBid("Let them have it", currentPlayer)}>Let them have it</button>
           <br></br>
           <button onClick={() => handleBid("Bid 30", currentPlayer)}>Bid 30</button>
           <br></br>
