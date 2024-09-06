@@ -5,6 +5,7 @@ import {shuffle, fullDeck} from './deck.js';
 import {player1, player2, player3, player4} from './players.js';
 import { bidding } from './bidding.js';
 import { initialDeal } from './initialDeal.js';
+import { discard } from './discard.js';
 // import { game } from './gameObject.js';
 
 
@@ -30,6 +31,7 @@ function App() {
   const [held, setHeld] = useState(false);
   const [wonBid, setWonBid] = useState(null);
   const [bidWinner, setBidWinner] = useState(null);
+  const [trump, setTrump] = useState(null);
 
   useEffect(() => {
     // Set currentPlayer based on currentID
@@ -140,6 +142,16 @@ function App() {
       }
     },[shuffled, deck])
 
+    const handleTrumpSelect = (suitSelected, player) => {
+      setTrump(suitSelected)
+    }
+    const handleDiscard = (card, index, player) => {
+      discard(card, index, player)
+    }
+    const handleDiscardingComplete = (player) => {
+      
+    }
+
     const availableBids = [20, 25, 30];
     const validBids = availableBids.filter(bid => bid > currentBid);
   return (
@@ -197,7 +209,34 @@ function App() {
         )}
         </div>
         <div className='trumpSelect'>
-          
+          {
+            currentPlayer?.id === bidWinner?.id && (
+              <>
+              <h2>Select Trump</h2>
+              <button onClick={()=>handleTrumpSelect("diamonds", currentPlayer)}>Diamonds</button>
+              <br></br>
+              <button onClick={()=>handleTrumpSelect("hearts", currentPlayer)}>Hearts</button>
+              <br></br>
+              <button onClick={()=>handleTrumpSelect("clubs", currentPlayer)}>Clubs</button>
+              <br></br>
+              <button onClick={()=>handleTrumpSelect("spades", currentPlayer)}>Spades</button>
+              </>
+            )
+          }
+        </div>
+        <div className='discard'>
+          {
+            trump !== null  && (
+              <>
+              <h2>Click a card to disard it.  When complete press "Discarding Complete"</h2>
+              <div>
+                {currentPlayer?.hand.map((card, index) => <button onClick={()=>handleDiscard(card, index, currentPlayer)}>card.sn</button>)}
+                </div>
+                <br></br>
+                <button onClick={()=>handleDiscardingComplete(currentPlayer)}>Discarding Complete</button>
+              </>
+            )
+          }
         </div>
     </div>
   );
