@@ -14,12 +14,12 @@ export function bidding(buttonText, currentPlayer){
     else if(currentPlayer.position === "right"){
         nextPosition = "dealer"
     }
+    else if(currentPlayer.position === "dealer"){
+        nextPosition = "bidder"
+    }
      if(buttonText === "Pass"){
         return [nextPosition, bid]
      }
-    if(buttonText === "Pass"){
-        bid = 20
-    }
     if(buttonText === "Bid 20"){
         bid = 20
     }
@@ -28,6 +28,9 @@ export function bidding(buttonText, currentPlayer){
     }
     else if(buttonText === "Bid 30"){
         bid = 30
+    }
+    if(buttonText === "Hold"){
+        
     }
 
     return [nextPosition, bid]

@@ -14,7 +14,7 @@ function App() {
   let currentID = "a123";
   // currentID = "b456"
   // currentID = "c789"
-  // currentID = "d000"
+  // // currentID = "d000"
   console.log("fullDeck:" + fullDeck)
   const [deck, setDeck] = useState([]);
   const [south, setSouth] = useState(player1);
@@ -27,6 +27,9 @@ function App() {
   const [currentBidder, setCurrentBidder] = useState(null);
   const [currentBid, setCurrentBid] = useState(null);
   const [highestBidder, setHighestBidder] = useState(null);
+  const [held, setHeld] = useState(false);
+  const [wonBid, setWonBid] = useState(null);
+  const [bidWinner, setBidWinner] = useState(null);
 
   useEffect(() => {
     // Set currentPlayer based on currentID
@@ -68,8 +71,37 @@ function App() {
     console.log("bid" + bid)
     console.log("currentBid" + currentBid)
     let nextPosition = bidArray[0]
-    if(bid > currentBid){
-      console.log("bid > currentBid")
+    if(setHeld(true)){
+      nextPosition = "dealer"
+      if(bid === 0){
+        setWonBid(currentBid)
+        setBidWinner(highestBidder)
+      }
+      setHeld(false)
+    }
+    if(nextPosition === "bidder"){
+      setCurrentBidder(highestBidder)
+      setHeld(true)
+      if(bid === 0){
+        setWonBid(currentBid)
+        if(south.position === "dealer"){
+          setBidWinner(south)
+        }
+        else if(west.position === "dealer"){
+          setBidWinner(west)
+          console.log("set west")
+        }
+        else if(north.position === "dealer"){
+          setBidWinner(north)
+          console.log("set north")
+        }
+        else if(east.position === "dealer"){
+        }
+        setBidWinner(east)
+      }
+    }
+    if(bid >= currentBid){
+      console.log("bid >= currentBid")
       setCurrentBid(bid)
       setHighestBidder(player)
     }
@@ -108,6 +140,8 @@ function App() {
       }
     },[shuffled, deck])
 
+    const availableBids = [20, 25, 30];
+    const validBids = availableBids.filter(bid => bid > currentBid);
   return (
     <div className="App">
      <header className="App-header">
@@ -115,7 +149,10 @@ function App() {
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <h1>Forty Fives</h1>
         <button onClick={handleShuffle}>Deal</button>
+        </header>
     <br></br>
+    <div className='handDisplay'>
+
         <p>Your Hand</p>
         {south.hand.length > 0 && (
           <div>{currentPlayer?.id === south.id && south.hand.map(card => card.sn).join(', ')}</div>
@@ -127,36 +164,41 @@ function App() {
           <div>{currentPlayer?.id === north.id && north.hand.map(card => card.sn).join(', ')}</div>
         )}
         {east.hand.length > 0 && (
-        <div>{currentPlayer?.id === east.id && east.hand.map(card => card.sn).join(', ')}</div>
+          <div>{currentPlayer?.id === east.id && east.hand.map(card => card.sn).join(', ')}</div>
         )}
+        </div>
+        <div className='bidDisplay'>
+
         {currentPlayer?.position !== "dealer" && currentBidder?.position === currentPlayer?.position && (
-        <>
-          <br></br>
-          <button onClick={() => handleBid("Bid 20", currentPlayer)}>Bid 20</button>
-          <br></br>
-          <button onClick={() => handleBid("Bid 25", currentPlayer)}>Bid 25</button>
-          <br></br>
-          <button onClick={() => handleBid("Bid 30", currentPlayer)}>Bid 30</button>
-          <br></br>
-          <button onClick={() => handleBid("Pass", currentPlayer)}>Pass</button>
-          <br></br>
+          <>
+          <br />
+        {validBids.map(bid => (
+          <React.Fragment key={bid}>
+        <button onClick={() => handleBid(`Bid ${bid}`, currentPlayer)}>Bid {bid}</button>
+        <br />
+      </React.Fragment>
+    ))}
+    <button onClick={() => handleBid("Pass", currentPlayer)}>Pass</button>
+    <br />
       </>
         )}
         {currentPlayer?.position === "dealer" && currentBidder?.position === currentPlayer?.position && (
-        <>
+          <>
           <br></br>
-          <button onClick={() => handleBid("Hold", currentPlayer)}>Hold</button>
-          <br></br>
-          <button onClick={() => handleBid("Let them have it", currentPlayer)}>Let them have it</button>
-          <br></br>
-          <button onClick={() => handleBid("Bid 30", currentPlayer)}>Bid 30</button>
+          {currentBid === 0 ? (
+            <button onClick={() => handleBid("Bid 20", currentPlayer)}>Bid 20</button>
+          ) : (
+            <button onClick={() => handleBid("Hold", currentPlayer)}>Hold</button>
+          )}
           <br></br>
           <button onClick={() => handleBid("Pass", currentPlayer)}>Pass</button>
           <br></br>
       </>
         )}
-
-      </header>
+        </div>
+        <div className='trumpSelect'>
+          
+        </div>
     </div>
   );
 }
