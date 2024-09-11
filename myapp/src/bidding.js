@@ -30,7 +30,7 @@ export function bidding(buttonText, currentPlayer){
         bid = 30
     }
     if(buttonText === "Hold"){
-        
+        bid = "held"
     }
 
     return [nextPosition, bid]

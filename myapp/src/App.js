@@ -15,8 +15,7 @@ function App() {
   let currentID = "a123";
   // currentID = "b456"
   // currentID = "c789"
-  // // currentID = "d000"
-  console.log("fullDeck:" + fullDeck)
+  // currentID = "d000"
   const [deck, setDeck] = useState([]);
   const [south, setSouth] = useState(player1);
   const [west, setWest] = useState(player2);
@@ -26,7 +25,7 @@ function App() {
   const [shuffled, setShuffled] = useState(false)
   const [currentPlayer, setCurrentPlayer] = useState(null);
   const [currentBidder, setCurrentBidder] = useState(null);
-  const [currentBid, setCurrentBid] = useState(null);
+  const [currentBid, setCurrentBid] = useState(0);
   const [highestBidder, setHighestBidder] = useState(null);
   const [held, setHeld] = useState(false);
   const [wonBid, setWonBid] = useState(null);
@@ -52,6 +51,7 @@ function App() {
     console.log('Shuffled Deck:', deck); // Log shuffled deck
     setDeck(shuffledDeck);
     setShuffled(true);
+    setHeld(false)
     if(south.position === "left"){
       setCurrentBidder(south)
     }
@@ -67,25 +67,20 @@ function App() {
   };
 
   const handleBid = (buttonText, player) => {
+    console.log("handling bid, highest bidder:" + highestBidder)
     const bidArray = bidding(buttonText, player)
     console.log(bidArray)
     let bid = bidArray[1]
     console.log("bid" + bid)
     console.log("currentBid" + currentBid)
+    console.log("setHeld::" + held)
     let nextPosition = bidArray[0]
-    if(setHeld(true)){
+    if(held == true){
       nextPosition = "dealer"
+      console.log("inside set held function")
       if(bid === 0){
         setWonBid(currentBid)
-        setBidWinner(highestBidder)
-      }
-      setHeld(false)
-    }
-    if(nextPosition === "bidder"){
-      setCurrentBidder(highestBidder)
-      setHeld(true)
-      if(bid === 0){
-        setWonBid(currentBid)
+        console.log("dealerwonbid")
         if(south.position === "dealer"){
           setBidWinner(south)
         }
@@ -98,14 +93,26 @@ function App() {
           console.log("set north")
         }
         else if(east.position === "dealer"){
+          setBidWinner(east)
         }
-        setBidWinner(east)
       }
+      setHeld(false)
     }
-    if(bid >= currentBid){
-      console.log("bid >= currentBid")
+    if(bid === "held"){
+      setCurrentBidder(highestBidder)
+      setHeld(true)
+      console.log("set held to true")
+    }
+    
+    console.log("testing bid isn't empty:" + bid)
+    console.log(currentBid)
+    if(bid > currentBid){
+      console.log("bid > currentBid")
       setCurrentBid(bid)
-      setHighestBidder(player)
+      if(player.position !== "dealer"){
+        setHighestBidder(player)
+        console.log("setting highest bidder")
+      }
     }
     if(south.position === nextPosition){
       setCurrentBidder(south)
@@ -122,6 +129,7 @@ function App() {
       console.log("set east")
       setCurrentBidder(east)
     }
+
     console.log("Bid:" + currentBid)
     console.log("Next position:" + nextPosition)
     console.log("North position:" + north?.position)
@@ -161,7 +169,6 @@ function App() {
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <h1>Forty Fives</h1>
         <button onClick={handleShuffle}>Deal</button>
-        </header>
     <br></br>
     <div className='handDisplay'>
 
@@ -238,6 +245,7 @@ function App() {
             )
           }
         </div>
+          </header>
     </div>
   );
 }
