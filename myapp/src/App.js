@@ -13,8 +13,8 @@ import { discard } from './discard.js';
 
 function App() {
   let currentID = "a123";
-  // currentID = "b456"
-  // currentID = "c789"
+  currentID = "b456"
+  currentID = "c789"
   // currentID = "d000"
   const [deck, setDeck] = useState([]);
   const [south, setSouth] = useState(player1);
@@ -31,6 +31,8 @@ function App() {
   const [wonBid, setWonBid] = useState(null);
   const [bidWinner, setBidWinner] = useState(null);
   const [trump, setTrump] = useState(null);
+  const [goKitty, setGoKitty] = useState(false);
+  const [go5, setGo5] = useState(false);
 
   useEffect(() => {
     // Set currentPlayer based on currentID
@@ -103,6 +105,10 @@ function App() {
       setHeld(true)
       console.log("set held to true")
     }
+    if(nextPosition === "bidder" && bid === 0){
+      setWonBid(currentBid)
+      setBidWinner(highestBidder)
+    }
     
     console.log("testing bid isn't empty:" + bid)
     console.log(currentBid)
@@ -153,6 +159,19 @@ function App() {
     const handleTrumpSelect = (suitSelected, player) => {
       setTrump(suitSelected)
     }
+    const handleGoKitty = (player) => {
+      console.log("Going on the kitty")
+      player.hand.splice(0, 5)
+      player.hand.push(...kitty)
+      setGoKitty(true)
+    }
+    const handleGo5 = (player) => {
+      console.log("Going on 5")
+      player.hand.splice(0, 4)
+      let new5 = deck.splice(0,5)
+      player.hand.push(...new5)
+      setGo5(true)
+    }
     const handleDiscard = (card, index, player) => {
       discard(card, index, player)
     }
@@ -201,7 +220,7 @@ function App() {
     <br />
       </>
         )}
-        {currentPlayer?.position === "dealer" && currentBidder?.position === currentPlayer?.position && (
+        {currentPlayer?.position === "dealer" && currentBidder?.position === currentPlayer?.position && wonBid == null && (
           <>
           <br></br>
           {currentBid === 0 ? (
@@ -227,6 +246,12 @@ function App() {
               <button onClick={()=>handleTrumpSelect("clubs", currentPlayer)}>Clubs</button>
               <br></br>
               <button onClick={()=>handleTrumpSelect("spades", currentPlayer)}>Spades</button>
+              <br></br>
+              {!go5 (!goKitty ? (
+                <button onClick={()=>handleGoKitty(currentPlayer)}>Go on the kitty</button>
+              ) : (
+              <button onClick={()=>handleGo5(currentPlayer)}>Go on 5 cards</button>
+              ))}
               </>
             )
           }
@@ -235,9 +260,9 @@ function App() {
           {
             trump !== null  && (
               <>
-              <h2>Click a card to disard it.  When complete press "Discarding Complete"</h2>
+              <h3>Click a card to disard it.  When complete press "Discarding Complete"</h3>
               <div>
-                {currentPlayer?.hand.map((card, index) => <button onClick={()=>handleDiscard(card, index, currentPlayer)}>card.sn</button>)}
+                {currentPlayer?.hand.map((card, index) => <button onClick={()=>handleDiscard(card, index, currentPlayer)}>{card.sn}</button>)}
                 </div>
                 <br></br>
                 <button onClick={()=>handleDiscardingComplete(currentPlayer)}>Discarding Complete</button>
